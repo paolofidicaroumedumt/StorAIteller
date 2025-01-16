@@ -78,17 +78,18 @@ The product has been named **StorAITeller** and this is a detailed description o
 
 7. *Positive feedback*: the users can provide their feedback to the generated story by clicking on the *Good story* button. Through such feedback, the story will be included in the next cycle of fine-tuning of the LLM performed through an external process. 
 
-ADD SCREENSHOT OF THE FRONT END HERE
+![image](https://github.com/user-attachments/assets/386c8313-93e7-43ed-9072-c8902201fe06)
+
 
 ## System architecture
 
 The architecture of the system, depicted in below figure, includes the following modules:
 
-ADD ARCHITECTURE IMAGE HERE
+![image](https://github.com/user-attachments/assets/47fa9b7a-6dd6-487a-97a0-6dd9a396d14b)
 
-A. *Web UI*, built in HTML and Javascript, using an external CSS file (stylesheet.css)
+A. *Web UI*, built in HTML and Javascript (storaiteller.html), using an external CSS file (stylesheet.css)
 
-B. *API gateway*, built in Python using the FastAPI library running on Uvicorn (a Web Server implementation for Python) that runs locally (host="127.0.0.1", port=8000). The API gateway takes care of the communication with the WebUI through REST APIs and orchestrates actions with Ollama and the Llama 3.2 model. These are the REST APIs defined in the API gateway:
+B. *API gateway*, built in Python using the FastAPI library running on Uvicorn (a Web Server implementation for Python) that runs locally (host="127.0.0.1", port=8000). The API gateway has been developed in the storaiteller.py file and it takes care of the communication with the WebUI through REST APIs and orchestrates actions with Ollama and the Llama 3.2 model. These are the REST APIs defined in the API gateway:
 
 - *setstory*, POST method that assembles the prompt to be fed to the LLM according to the parameters defined in the story generation settings of the Web UI.
 The prompt is assembled inserting the story parameters in the placeholders of the following template: main prompt = "You are a writer. Write a story, without extra comments, of maximum {maxnowords} words, where the main characters names are {maincharacter}. The story genre is {genre} and you have to use a {register} register. The keywords of the story are {keywords}. The story must have an introduction, a development".
