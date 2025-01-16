@@ -84,6 +84,8 @@ ADD SCREENSHOT OF THE FRONT END HERE
 
 The architecture of the system, depicted in below figure, includes the following modules:
 
+ADD ARCHITECTURE IMAGE HERE
+
 A. *Web UI*, built in HTML and Javascript, using an external CSS file (stylesheet.css)
 
 B. *API gateway*, built in Python using the FastAPI library running on Uvicorn (a Web Server implementation for Python) that runs locally (host="127.0.0.1", port=8000). The API gateway takes care of the communication with the WebUI through REST APIs and orchestrates actions with Ollama and the Llama 3.2 model. These are the REST APIs defined in the API gateway:
