@@ -97,11 +97,7 @@ The prompt is assembled inserting the story parameters in the placeholders of th
 
 - *redopartofstory*, POST method that assembles a new prompt when only a part of the story must be regenerated. The story that needs to be partially redone is split in {initialpart, selectedpart} and {finalpart}, where the {selectedpart} is the section of the story that needs to be regenerated. This is the template of the {new prompt} }and how it is assembled: {new prompt = main prompt}} + 'It is important that the story starts with this part unchanged:{initialpart} and finishes with this part unchanged {finalpart}'
 
- - *savestory*, POST method that saves a story together with its story generation settings in a JSON file when the users provides a feedback positive. The JSON file template is the following: 
-
-    'text': '{<s> [INST] {main prompt}} [/INST] {story} </s>}'
-
- where {main prompt} is the prompt that has generated the story and {story} is the content of the story itself.
+ - *savestory*, POST method that saves a story together with its story generation settings in a JSON file when the users provides a feedback positive. 
 
 C. *Ollama* platform that gives access to the\textit{ Llama 3.2 model} and its fine-tuned version
 
