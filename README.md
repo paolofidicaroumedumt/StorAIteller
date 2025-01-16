@@ -15,6 +15,16 @@ The objectives of this project are the following:
 ## Installation 
 
 The project is made of 3 main modules:
-- Ollama platform
-- Back-end that is implemented by the StorAIteller.py file
-- Front-end that is implemented by the StorAIteller.html file
+- Ollama platform:
+  - Install locally the Ollama platform, see [here](https://github.com/ollama/ollama) 
+  - Install the [Ollama library](https://github.com/ollama/ollama-python) for Python
+  - Install Llama 3.2 3B parameters 2.0 GB model locally by running the command (Windows cmd): ollama pull llama3.2  
+  - Run the LLama 3.2 model by executing this command (Windows cmd): ollama run llama3.2
+- Back-end, that is implemented by the StorAIteller.py Python script file that acts as API gateway and bridge between the Ollama platform and the Front-end
+  - Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installation/) locally
+  - Install the [FastAPI](https://github.com/fastapi/fastapi) Python library and [Uvicorn](https://github.com/encode/uvicorn) ASGI Web server for Python
+  - Run the StorAIteller.py script available in this repository; this will create a web server listening to host="127.0.0.1" and port=8000 (local machine)
+- Front-end that is implemented by the StorAIteller.html and stylesheet.css files, both available in this repository, that need to be installed in the same directory.
+
+
+
