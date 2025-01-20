@@ -26,7 +26,7 @@ The project is made of 3 main modules:
   - Install the [FastAPI](https://github.com/fastapi/fastapi) Python library and [Uvicorn](https://github.com/encode/uvicorn) ASGI Web server for Python
   - Run the StorAIteller.py script available in this repository; this will create a web server listening to host="127.0.0.1" and port=8000 (local machine)
 - Front-end that is implemented by the StorAIteller.html and stylesheet.css files, both available in this repository, that need to be installed in the same directory.
-- Fine-tuning process, that is implemented by the finetuner.py Python script that has dependencies with the [Unsloth Python library] (https://github.com/unslothai/unsloth) and that require also the installation of the [llama.cpp library] (https://github.com/ggerganov/llama.cpp).
+- Fine-tuning process, that is implemented by the finetuner.py Python script that has dependencies with the [Unsloth Python library] (https://github.com/unslothai/unsloth) and that require also the installation of the [llama.cpp library] (https://github.com/ggerganov/llama.cpp). This process must be run in a Linux-Unix environment. If the installation is done on a Windows machine, the [WSL environment](https://github.com/microsoft/WSL) must be installed and the processes must be run inside WSL.
   
 ## Features
 
@@ -111,24 +111,24 @@ C. *Ollama* platform that gives access to the Llama 3.2 model and its fine-tuned
 D. The *fine tuning process* that fine-tunes the LLM model based on Llama 3.2 with the stories stored in the CSV file. This process (see Figure 3) is run by:
   1) executing the finetuner.py script that generates as output the LoRA adapter for the fine-tuning,
   2) executing a python script provided by the Llama.cpp library that transforms the LoRA adapter in a gguf file, a format of adapter supported by the Ollama platform.
- The finetuner.py script makes use of the Unsloth python library, an open source LLM fine tuning library that allows to generate LoRA (Low Rank Adaptation) adapters using efficiently the available hardware. This library runs on Linux or Unix operating systems, therefore the WSL (Windows Subsytem for Linux) framework has to be installed in Windows machines. A virtual environment specific for the fine-tuning process need also to be created in order to install all the libraries necessary for the task. The finetuner.py script creates the adapter starting from the current model (based on the Llama 3.2 3B pretrained model) and using the PEFT
+The finetuner.py script makes use of the Unsloth python library, an open source LLM fine tuning library that allows to generate LoRA (Low Rank Adaptation) adapters using efficiently the available hardware. This library runs on Linux or Unix operating systems, therefore the WSL (Windows Subsytem for Linux) framework has to be installed in Windows machines. A virtual environment specific for the fine-tuning process need also to be created in order to install all the libraries necessary for the task. The finetuner.py script creates the adapter starting from the current model (based on the Llama 3.2 3B pretrained model) and using the PEFT
 (Parameter-Efficient Fine-Tuning) library to fine-tune only a part of the parameters of the model. These are the steps executed by the finetuner.py script:
-  1) Thedata in the datastories.csv is loaded and the template expected by Ollama for the Llama 3.2 model is applied to the input dataset;
- 2) The trainer is built defining its parameters (for example the number of training epochs, the learning rate, etc.) and the current model is trained accordingly;
- 3) The process generates the LoRA adapter
+  1) The data in the datastories.csv is loaded and the template expected by Ollama for the Llama 3.2 model is applied to the input dataset;
+  2) The trainer is built defining its parameters (for example the number of training epochs, the learning rate, etc.) and the current model is trained accordingly;
+  3) The process generates the LoRA adapter
 Considering that Ollama handles only adapters in the gguf format, the LoRA adapter must be converted to gguf file. This is done by executing from the CLI a script made available by the Llama.cpp library:
  
   *python3 convert_lor_to_gguf.py ../lora_model/ --outype f16 --outfile storaiteller.gguf*
 
  The f16 quantization has been applied in order to have a fast conversion and retain the accuracy of the original model. A modelfile.md file must be defined to instruct Ollama on how to integrate the current model with the above generated gguf adapter. The modelfile.md also defines the temperature of the model (when the temperature is closer to 1, the generated content is more creative, meaning that the next token selected in the sequence might not be the one with the highest probability) and the maximum length of the context window. The modelfile.md is defined as:
 
-  *FROM D:\ollama\Ollamamodels\blobs\sha256-dde5aa3fc5ffc17176b5e8bdc82f587b24b2678c6c66101bf7da77af9f7ccdff
-  # add the adpater
+  FROM D:\ollama\Ollamamodels\blobs\sha256-dde5aa3fc5ffc17176b5e8bdc82f587b24b2678c6c66101bf7da77af9f7ccdff
+  /# add the adpater
   ADAPTER D:\python\venvforfinetuning\llama.cpp\storaiteller.gguf
-  # sets the temperature to 1 [higher is more creative, lower is more coherent]
+  /# sets the temperature to 1 [higher is more creative, lower is more coherent]
   PARAMETER temperature 0.8
-  # sets the lenght of the context window so that long stories can be generated without losing cohesion
-  PARAMETER num_ctx 120000*
+  /# sets the lenght of the context window so that long stories can be generated without losing cohesion
+  PARAMETER num_ctx 120000
 
  Running the following CLI command, Ollama generates the new fine-tuned storaitelledmodel model that now can be used to generate new stories:  *ollama create storaitellermodel-f ./modelfile.md*
 
