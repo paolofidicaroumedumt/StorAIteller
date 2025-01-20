@@ -21,10 +21,10 @@ The project is made of 4 main modules:
   - Install the [Ollama library](https://github.com/ollama/ollama-python) for Python
   - Install Llama 3.2 3B parameters 2.0 GB model locally by running the command (Windows cmd): ollama pull llama3.2  
   - Run the LLama 3.2 model by executing this command (Windows cmd): ollama run llama3.2
-- Back-end/API gateway, that is implemented by the StorAIteller.py Python script file that acts as API gateway and a bridge between the Ollama platform and the Front-end:
+- Back-end/API gateway, that is implemented by the StorAIteller1.py Python script file that acts as API gateway and a bridge between the Ollama platform and the Front-end:
   - Install [Python](https://www.python.org/downloads/) and [pip](https://pip.pypa.io/en/stable/installation/) locally
   - Install the [FastAPI](https://github.com/fastapi/fastapi) Python library and [Uvicorn](https://github.com/encode/uvicorn) ASGI Web server for Python
-  - Run the StorAIteller.py script available in this repository; this will create a web server listening to host="127.0.0.1" and port=8000 (local machine)
+  - Run the StorAIteller1.py script available in this repository; this will create a web server listening to host="127.0.0.1" and port=8000 (local machine)
 - Front-end that is implemented by the StorAIteller.html and stylesheet.css files, both available in this repository, that need to be installed in the same directory.
 - Fine-tuning process, that is implemented by the finetuner.py Python script that has dependencies with the [Unsloth Python library](https://github.com/unslothai/unsloth) and that require also the installation of the [llama.cpp library](https://github.com/ggerganov/llama.cpp). This process can be run periodically, when the Back-end module has stored stories in the data_stories.csv file based on the positive feedback recevied by the users. The finetuner.py script must be run in a Linux-Unix environment. If the installation is done on a Windows machine, the [WSL environment](https://github.com/microsoft/WSL) must be installed and the processes must be run inside WSL.
   
@@ -91,7 +91,7 @@ The architecture of the system, depicted in below figure, includes the following
 
 A. *Web UI*, built in HTML and Javascript, using an external CSS file (stylesheet.css). The Web UI is contained in the storaitellerui.html file.
 
-B. *API gateway*, built in Python using the FastAPI library running on Uvicorn (a Web Server implementation for Python) that runs locally (host="127.0.0.1", port=8000). The API gateway has been developed in the storaiteller.py file and it takes care of the communication with the WebUI through REST APIs and orchestrates actions with Ollama and the Llama 3.2 model. These are the REST APIs defined in the API gateway:
+B. *API gateway*, built in Python using the FastAPI library running on Uvicorn (a Web Server implementation for Python) that runs locally (host="127.0.0.1", port=8000). The API gateway has been developed in the storaiteller1.py file and it takes care of the communication with the WebUI through REST APIs and orchestrates actions with Ollama and the Llama 3.2 model. These are the REST APIs defined in the API gateway:
 
 - *setstory*, POST method that assembles the prompt to be fed to the LLM according to the parameters defined in the story generation settings of the Web UI.
 The prompt is assembled inserting the story parameters in the placeholders of the following template: main prompt = "You are a writer. Write a story, without extra comments or questions, of maximum {maxnowords} words, where the main characters names are {maincharacter}. The story genre is {genre} and you have to use a {register} register. The keywords of the story are {keywords}. The story must have an introduction, a development".
