@@ -100,7 +100,7 @@ The prompt is assembled inserting the story parameters in the placeholders of th
 
 - *ws*, this method opens the web-socket between Ollama and the Web UI, triggers the generation of the story by the Llama 3.2 and the streaming of the generated content towards the Web GUI.
 
-- *redopartofstory*, POST method that assembles a new prompt when only a part of the story must be regenerated. The story that needs to be partially redone is split in {initialpart, selectedpart} and {finalpart}, where the {selectedpart} is the section of the story that needs to be regenerated. This is the template of the {new prompt} }and how it is assembled: {new prompt = main prompt}} + 'It is important that the story starts with this part unchanged:{initialpart} and finishes with this part unchanged {finalpart}'.
+- *redopartofstory*, POST method that assembles a new prompt when only a part of the story must be regenerated. The story that needs to be partially redone is split in {initialpart, selectedpart} and {finalpart}, where the {selectedpart} is the section of the story that needs to be regenerated. This is the template of the {new prompt} }and how it is assembled: {new prompt = main prompt}} + '"It is important that the story includes exactly this part at the beginning: {initialpart} and exactly this part at the end: {finalpart}.".'.
 
  - *savestory*, POST method that saves a story and its prompt in the *data_stories.csv* CSV file when the users provides a positive feedback. The CSV file has the following comma separated fields:
    - Prompt, that contains the prompt that has generated the story;
