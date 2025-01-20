@@ -87,7 +87,7 @@ The product has been named **StorAITeller** and this is a detailed description o
 
 The architecture of the system, depicted in below figure, includes the following modules:
 
-![image](https://github.com/user-attachments/assets/47fa9b7a-6dd6-487a-97a0-6dd9a396d14b)
+
 
 A. *Web UI*, built in HTML and Javascript, using an external CSS file (stylesheet.css). The Web UI is contained in the storaitellerui.html file.
 
@@ -111,6 +111,7 @@ C. *Ollama* platform that gives access to the Llama 3.2 model and its fine-tuned
 D. The *fine tuning process* that fine-tunes the LLM model based on Llama 3.2 with the stories stored in the CSV file. This process (see Figure 3) is run by:
   1) executing the finetuner.py script that generates as output the LoRA adapter for the fine-tuning,
   2) executing a python script provided by the Llama.cpp library that transforms the LoRA adapter in a gguf file, a format of adapter supported by the Ollama platform.
+
 The finetuner.py script makes use of the Unsloth python library, an open source LLM fine tuning library that allows to generate LoRA (Low Rank Adaptation) adapters using efficiently the available hardware. This library runs on Linux or Unix operating systems, therefore the WSL (Windows Subsytem for Linux) framework has to be installed in Windows machines. A virtual environment specific for the fine-tuning process need also to be created in order to install all the libraries necessary for the task. The finetuner.py script creates the adapter starting from the current model (based on the Llama 3.2 3B pretrained model) and using the PEFT
 (Parameter-Efficient Fine-Tuning) library to fine-tune only a part of the parameters of the model. These are the steps executed by the finetuner.py script:
   1) The data in the datastories.csv is loaded and the template expected by Ollama for the Llama 3.2 model is applied to the input dataset;
