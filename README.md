@@ -26,7 +26,8 @@ The project is made of 3 main modules:
   - Install the [FastAPI](https://github.com/fastapi/fastapi) Python library and [Uvicorn](https://github.com/encode/uvicorn) ASGI Web server for Python
   - Run the StorAIteller.py script available in this repository; this will create a web server listening to host="127.0.0.1" and port=8000 (local machine)
 - Front-end that is implemented by the StorAIteller.html and stylesheet.css files, both available in this repository, that need to be installed in the same directory.
-
+- Fine-tuning process, that is implemented by the finetuner.py Python script that has dependencies with the [Unsloth Python library] (https://github.com/unslothai/unsloth) and that require also the installation of the [llama.cpp library] (https://github.com/ggerganov/llama.cpp).
+  
 ## Features
 
 The product has been named **StorAITeller** and this is a detailed description of its features:
