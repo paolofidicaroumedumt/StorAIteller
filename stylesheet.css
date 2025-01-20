@@ -1,0 +1,197 @@
+body {
+  background-color: #669999;
+  color: #e0ffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+  
+dt {
+  display: none;
+  font-size: 60px;
+  font-weight: 400;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+  
+dd {
+  display: none;
+  font-size: 26px;
+  font-weight: 100;
+  max-width: 100vw;
+  max-height: 100vh;
+}  
+  
+p {
+  display: none;
+  color: #334f4f;
+  border-radius: 7px;
+  border: 3px solid #334f4f;
+  font-size: 24px;
+  text-decoration: none;
+  padding: 7px;
+  margin-left: 40px;
+  font-family: Arial, Helvetica, sans-serif;
+  
+}
+
+textarea {
+  background-color: white;
+  color: black;
+  resize: none;
+  width: 100%;
+  height: 500px;
+  overflow-y: scroll;
+  scroll-behavior: auto;
+  font-size: 18px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+div {
+  text-align: center;
+  height: 97.7vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: scroll;
+  scroll-behavior: auto;
+  font-size: 18px;
+}
+
+.div-1 {
+  background-color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
+}
+
+td {
+
+  vertical-align: top;
+  padding-right: 10px;
+  
+}
+
+hr {
+  width: 75%;
+  
+}
+
+.subtitle {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 5px;
+  padding-top: 0;
+}
+
+h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 1px;
+  font-size: medium;
+  font-weight: bold;
+}
+
+.block {
+  margin: 1px;
+  border: 1px solid #e0ffff;
+  background-color: #e0ffff;
+  color: #669999;
+  font-family: Arial, Helvetica, sans-serif, cursive;
+  padding: 2px;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 3px;
+} 
+
+.notification {
+  background-color: #669999;
+  border: 1px solid #669999;
+  color: #e0ffff;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.about {
+  width: 75%;
+  
+}  
+#spacer {
+  height: 100px;
+}  
+.creds {
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: 2px;
+}  
+
+/* Style buttons */
+.btn {
+  background-color:#669999; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  padding: 2px 2px; /* Some padding */
+  font-size: 16px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+  float: right;
+  
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color:#344e4e;
+}
+
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.btn-left {
+  float: left;
+  width: 75px;
+  height: 30px;
+}
+
+.btn-center {
+  float: center;
+  width: 75px;
+  height: 30px;
+}
+
+.btn-right {
+  float: right;
+  width: 75px;
+  height: 30px;
+}
+
+.btn-act-left {
+  float: left;
+  width: 25%;
+  height: 30px;
+  margin-right: 60px;
+}
+
+.btn-act-central {
+  display:block;
+  
+  width: 25%;
+  height: 30px;
+}
+
+.btn-act-right {
+  float:right;
+  
+  width: 25%;
+  height: 30px;
+}
+
+.btn-act-good {
+  float:right;
+  
+  width: 30%;
+  height: 30px;
+}

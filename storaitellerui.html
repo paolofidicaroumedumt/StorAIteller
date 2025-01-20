@@ -1,0 +1,303 @@
+<head>
+    <link rel="stylesheet" href="stylesheet.css" type="text/css">
+  </head>
+
+ <div>
+    <h1>StorAIteller</h1>
+    <span class="subtitle">AI powered content generation system capable of creating
+  coherent, creative stories</span>
+    <hr>
+    <table width="80%">
+    <tr>
+    <td width="25%" align="left" valign="top">
+     <h2>STORY GENERATION SETTINGS</h2><br><br>
+    <form id="stpar" class="subtitle">
+   
+    <label for="Charactername">Main characters' names:</label>
+    <input type="text" id="Charactername" name="Charactername" align="right" size="25" >
+    <br><br>
+    <label for="Storytheme">Story keywords:</label>
+    <input type="text" id="Storytheme" name="Storytheme" size="25" >
+    
+       <!-- <center><label for="temperature" >Creativity level: <output id="temperaturevalue"></output></label></center>
+      <br><center><label class="block">Less creative</label>
+    <input type="range" min="0" max="1" value="0.7" class="slider" id="temperature" step="0.01">
+      <label class="block">More creative</label></center>
+      <script>
+        const value = document.querySelector("#temperaturevalue");
+        const input = document.querySelector("#temperature");
+        value.textContent = input.value;
+        input.addEventListener("input", (event) => {
+          value.textContent = event.target.value;
+        });
+        </script> -->
+      <br><br>
+      <label for="Genre">Genre:</label>
+    <select name="Genre" id="Genre">
+    <option value="Adventure">Adventure</option>
+    <option value="Biography">Biography</option>
+    <option value="Comedy">Comedy</option>
+    <option value="Drama">Drama</option>
+    <option value="Fantasy">Fantasy</option>
+    <option value="Gothic">Gothic</option>
+    <option value="Hystorical">Hystorical</option>
+    <option value="Horror">Horror</option>
+      <option value="Mistery">Mistery</option>
+      <option value="Quirky">Quirky</option>
+      <option value="Romance">Romance</option>
+      <option value="Sci-Fy">Sci-Fy</option>
+      <option value="Thriller">Thriller</option>
+      <option value="Tragedy">Tragedy</option>
+      <option value="War">War</option>
+  </select>
+      <br><br>
+      <label for="Register">Register:</label>
+    <select name="Register" id="Register">
+      <option value="Casual">Casual</option>
+      <option value="Cerebral">Cerebral</option>
+      <option value="Conversational">Conversational</option>
+      <option value="Descriptive">Descriptive</option>
+      <option value="Direct">Direct</option>
+      <option value="Elegant">Elegant</option>
+      <option value="Formal">Formal</option>
+      <option value="Irreverent">Irreverent</option>
+      <option value="Playful">Playful</option>
+      <option value="Vivid">Vivid</option>
+      </select>
+      <br><br>
+      <input type="checkbox" id="Childfriendly" name="Childfriendly" value="No">
+      <label for="Childfriendly"> Child-friendly content</label><br><br>   
+    <label for="Maxnowords">Max number of words:</label>
+    <input type="text" id="Maxnowords" name="Maxnowords" align="right"><br><br>
+    <input type="checkbox" id="finaltwist" name="finaltwist" value="Yes">
+    <label for="finaltwist"> Final twist</label><br><br>
+    <button type="submit" id="submitButton" class="btn-left" disabled>Submit</button>
+    <button type="reset" id="resetButton" class="btn-right" disabled>Reset</button> 
+ 
+    <div id="response" style="display: none;"></div>
+   
+    <script>
+      
+        // Get references to the input fields and button
+        const Charactername = document.getElementById('Charactername');
+        const Storytheme = document.getElementById('Storytheme');
+        const nowords = document.getElementById('Maxnowords');
+        const submitButton = document.getElementById('submitButton');
+        const resetButton = document.getElementById('resetButton');
+
+        // Function to check if fields are populated
+        function checkFields() {
+            if (Charactername.value.trim() !== '' && Storytheme.value.trim() !== '' && nowords.value.trim() !== '') {
+                submitButton.disabled = false;
+                resetButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+                resetButton.disabled = true;
+            }
+        }
+
+
+        function cleanstory() {
+      document.getElementById("output").innerHTML = "";
+      document.getElementById("Rewritepartofstorybutton").disabled = true;
+      document.getElementById("writestorybutton").innerHTML = 'Write a new story';
+      document.getElementById("writestorybutton").disabled = true;
+      document.getElementById("Goodstory").disabled = true;
+      document.getElementById("Goodstory").innerHTML = 'Good story <img id="myImage" alt="OK" width="20" height="20" src="thumbs-up.svg" />';
+    }
+        // Add event listeners to the fields
+        Charactername.addEventListener('input', checkFields);
+        Storytheme.addEventListener('input', checkFields);
+        nowords.addEventListener('input', checkFields);
+        resetButton.addEventListener('click', cleanstory);
+        submitButton.addEventListener('click', cleanstory);
+
+  
+</script>  
+
+   <script>
+    const form = document.getElementById('stpar');
+    const responseDiv = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const payload = {
+            maincharacter: document.getElementById("Charactername").value,
+            keywords: document.getElementById("Storytheme").value,
+            genre: document.getElementById("Genre").value,
+            registro: document.getElementById("Register").value,
+            childsafe: document.getElementById("Childfriendly").checked, // Convert to boolean
+            maxnowords: parseInt(document.getElementById("Maxnowords").value), // Convert to integer
+            twist: document.getElementById("finaltwist").checked // Convert to boolean
+        };
+        
+        try {
+            const response = await fetch('http://127.0.0.1:8000/setstory/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            responseDiv.textContent = JSON.stringify(result, null, 2);
+            document.getElementById("writestorybutton").disabled = false;
+             } catch (error) {
+            responseDiv.textContent = `Error: ${error.message}`;
+        }
+    });
+</script>
+  
+  
+</form>
+  </td>
+    <td width="75%">
+      <button id="writestorybutton" onclick="Writestory()" disabled class="btn-act-left">Write a new story</button>
+      <button id="Rewritepartofstorybutton" onclick="Rewritepartofstory()" disabled class="btn-act-left">Select part to be rewritten</button>           
+      <button title="Good story" id="Goodstory" class="btn-act-good" onclick="OKStory(this)" disabled>
+        Good story <img id="myImage" alt="OK" width="20" height="20" src="thumbs-up.svg" />
+        <i title="okiconimg" class="okicon"></i>
+      </button>
+     
+      <br><br>
+      <textarea id="output" name="output" rows="27" cols="50">
+        
+        </textarea>
+        Disclaimer: this content is AI-generated. This tool should be used as a complement to human creativity, not a replacement.
+        <input type="text" class="notification" size="100" id="messageforfinetuning" name="messageforfinetuning" required />
+    
+        <script>
+          async function OKStory(button) {
+            const img = button.querySelector('#myImage'); // Select the image within the button
+            const currentSrc = img.src;
+            const newSrc = currentSrc.includes('thumbs-up.svg') ? 'thumbs-up-full.svg' : 'thumbs-up.svg'; // Toggle image
+          
+            img.src = newSrc;
+                    
+              // Optional: add some logic to handle the button click action
+              // based on the new image/state
+              if (newSrc === 'thumbs-up-full.svg') {
+                  //alert("Thumbs down!");
+                  
+                  // Perform actions for "thumbs down" state
+                  document.getElementById("Goodstory").disabled = true;
+                  document.getElementById("Goodstory").innerHTML = "You like the story!";
+                  const payloadsavestory = {
+                    maincharacter: document.getElementById("Charactername").value,
+                    keywords: document.getElementById("Storytheme").value,
+                    genre: document.getElementById("Genre").value,
+                    registro: document.getElementById("Register").value,
+                    childsafe: document.getElementById("Childfriendly").checked, // Convert to boolean
+                    maxnowords: parseInt(document.getElementById("Maxnowords").value), // Convert to integer
+                    twist: document.getElementById("finaltwist").checked, // Convert to boolean
+                    story: document.getElementById("output").value.replace(/(\r\n|\n|\r)/gm, "")
+                  };
+                  try {
+                       const response = await fetch('http://127.0.0.1:8000/savestory/', {
+                       method: 'POST',
+                       headers: { 'Content-Type': 'application/json' },
+                       body: JSON.stringify(payloadsavestory)
+                       });
+              
+                      if (!response.ok) {
+                        throw new Error(`Error: ${response.statusText}`);
+                          }
+  
+                      const result = await response.json();
+                      responseDiv.textContent = JSON.stringify(result, null, 2);
+                      document.getElementById("Goodstory").innerHTML = 'Story added to the next fine tuning <img id="myImage" alt="OK" width="20" height="20" src="thumbs-up-full.svg" />';
+                      }
+                  catch (error) {
+                    responseDiv.textContent = `Error: ${error.message}`;
+                    }
+
+              } else {
+                  //alert("Thumbs up!");
+                  // Perform actions for "thumbs up" state
+                  
+              }
+          }
+          </script>
+
+         <script>
+          function Writestory() {
+          
+            const outputDiv = document.getElementById('output');
+          outputDiv.innerHTML="";
+          const ws = new WebSocket("ws://localhost:8000/ws");
+          document.getElementById("writestorybutton").innerHTML = 'Storywriting in progress..<img id="writingicon" alt="OK" width="20" height="20" src="writingicon.gif" />';
+          ws.onmessage = (event) => {
+              outputDiv.textContent += event.data;
+          };
+
+          ws.onopen = () => {
+              console.log('WebSocket connection established');
+          };
+
+          ws.onclose = () => {
+              console.log('WebSocket connection closed');
+              document.getElementById("Rewritepartofstorybutton").disabled = false;
+              document.getElementById("writestorybutton").innerHTML = 'Regenerate the story';
+              document.getElementById("Goodstory").disabled = false;
+          };
+
+          ws.onerror = (error) => {
+              console.error('WebSocket error:', error);
+          };
+          }         
+          
+      </script>
+  
+  <script>
+    async function Rewritepartofstory() {
+    
+      var text = document.getElementById("output");
+      var t = text.value.substr(text.selectionStart, text.selectionEnd - text.selectionStart);
+      var textbefore = text.value.substr(0, text.selectionStart).replace(/(\r\n|\n|\r)/gm, "");
+      var textafter = text.value.substr(text.selectionEnd , text.value.length - text.selectionEnd).replace(/(\r\n|\n|\r)/gm, "");
+       
+      const payloadrs = {
+              textbefore: textbefore,
+              textselected: t,
+              textafter: textafter
+          };
+      
+      try {
+              const response = await fetch('http://127.0.0.1:8000/redopartstory/', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payloadrs)
+              });
+              
+              if (!response.ok) {
+                  throw new Error(`Error: ${response.statusText}`);
+              }
+  
+              const result = await response.json();
+              responseDiv.textContent = JSON.stringify(result, null, 2);
+              document.getElementById("writestorybutton").innerHTML = 'Regenerate selected part only';
+          } catch (error) {
+              responseDiv.textContent = `Error: ${error.message}`;
+          }
+    }         
+    
+</script>
+
+
+    </td>
+    </tr>
+     
+  </table>
+    
+        
+          
+        </div>
+  
+   
+   
+  </div>
+  </div>
