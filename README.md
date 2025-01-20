@@ -87,7 +87,7 @@ The product has been named **StorAITeller** and this is a detailed description o
 
 The architecture of the system, depicted in below figure, includes the following modules:
 
-![image](https://github.com/paolofidicaroumedumt/REPOSITORY/blob/main/img/StorAITeller architecture csv.png|alt=architecture)
+![StorAITeller architecture csv](https://github.com/user-attachments/assets/5fc1ee47-ab7d-4e65-bcf4-cdbaeb94d00a)
 
 A. *Web UI*, built in HTML and Javascript, using an external CSS file (stylesheet.css). The Web UI is contained in the storaitellerui.html file.
 
