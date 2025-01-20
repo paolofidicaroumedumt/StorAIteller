@@ -103,14 +103,17 @@ The prompt is assembled inserting the story parameters in the placeholders of th
 - *redopartofstory*, POST method that assembles a new prompt when only a part of the story must be regenerated. The story that needs to be partially redone is split in {initialpart, selectedpart} and {finalpart}, where the {selectedpart} is the section of the story that needs to be regenerated. This is the template of the {new prompt} }and how it is assembled: {new prompt = main prompt}} + 'It is important that the story starts with this part unchanged:{initialpart} and finishes with this part unchanged {finalpart}'.
 
  - *savestory*, POST method that saves a story and its prompt in the datastories CSV file when the users provides a positive feedback. The CSV file has the following comma separated fields:
-   • Prompt, that contains the prompt that has generated the story;
-   • Story, that contains the generated story.
+   - Prompt, that contains the prompt that has generated the story;
+   - Story, that contains the generated story.
 
 C. *Ollama* platform that gives access to the Llama 3.2 model and its fine-tuned version (storaitellermodel).
 
 D. The *fine tuning process* that fine-tunes the LLM model based on Llama 3.2 with the stories stored in the CSV file. This process (see Figure 3) is run by:
   1) executing the finetuner.py script that generates as output the LoRA adapter for the fine-tuning,
   2) executing a python script provided by the Llama.cpp library that transforms the LoRA adapter in a gguf file, a format of adapter supported by the Ollama platform.
+
+![fine tuning process architecture](https://github.com/user-attachments/assets/3b28c9cc-74f1-4a33-8bdf-0f8fbfc1fc1b)
+
 
 The finetuner.py script makes use of the Unsloth python library, an open source LLM fine tuning library that allows to generate LoRA (Low Rank Adaptation) adapters using efficiently the available hardware. This library runs on Linux or Unix operating systems, therefore the WSL (Windows Subsytem for Linux) framework has to be installed in Windows machines. A virtual environment specific for the fine-tuning process need also to be created in order to install all the libraries necessary for the task. The finetuner.py script creates the adapter starting from the current model (based on the Llama 3.2 3B pretrained model) and using the PEFT
 (Parameter-Efficient Fine-Tuning) library to fine-tune only a part of the parameters of the model. These are the steps executed by the finetuner.py script:
