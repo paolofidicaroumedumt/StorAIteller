@@ -11,6 +11,7 @@ The objectives of this project are the following:
   - define the parameters to be considered for the story generation
   - refine the generated story and regenerate part of it
   - provide a positive feedback to the generated story in order to include the story in an external fine-tuning process
+- implementation of the fine-tuning process that applies adapters to the LLM in order to consider the positive feedback provided by the users and enhance the quality of future story generations.
  
 ## Installation 
 
@@ -87,21 +88,47 @@ The architecture of the system, depicted in below figure, includes the following
 
 ![image](https://github.com/user-attachments/assets/47fa9b7a-6dd6-487a-97a0-6dd9a396d14b)
 
-A. *Web UI*, built in HTML and Javascript (storaiteller.html), using an external CSS file (stylesheet.css)
+A. *Web UI*, built in HTML and Javascript, using an external CSS file (stylesheet.css). The Web UI is contained in the storaitellerui.html file.
 
 B. *API gateway*, built in Python using the FastAPI library running on Uvicorn (a Web Server implementation for Python) that runs locally (host="127.0.0.1", port=8000). The API gateway has been developed in the storaiteller.py file and it takes care of the communication with the WebUI through REST APIs and orchestrates actions with Ollama and the Llama 3.2 model. These are the REST APIs defined in the API gateway:
 
 - *setstory*, POST method that assembles the prompt to be fed to the LLM according to the parameters defined in the story generation settings of the Web UI.
-The prompt is assembled inserting the story parameters in the placeholders of the following template: main prompt = "You are a writer. Write a story, without extra comments, of maximum {maxnowords} words, where the main characters names are {maincharacter}. The story genre is {genre} and you have to use a {register} register. The keywords of the story are {keywords}. The story must have an introduction, a development".
+The prompt is assembled inserting the story parameters in the placeholders of the following template: main prompt = "You are a writer. Write a story, without extra comments or questions, of maximum {maxnowords} words, where the main characters names are {maincharacter}. The story genre is {genre} and you have to use a {register} register. The keywords of the story are {keywords}. The story must have an introduction, a development".
 <br/>If the {Final twist} parameter of the story generator settings is set as True, then this string is appended to the main prompt: "The finale of the story must have a twist."
 <br/>If the {Child-friendly} parameter of the story generator settings is set as True, then this string is also appended to the main prompt: "The content must be child-friendly. The story might not involve children."
 
-- *ws*, this method opens the web-socket between Ollama and the Web UI, triggers the generation of the story by the Llama 3.2 and the streaming of the generated content towards the Web GUI
+- *ws*, this method opens the web-socket between Ollama and the Web UI, triggers the generation of the story by the Llama 3.2 and the streaming of the generated content towards the Web GUI.
 
-- *redopartofstory*, POST method that assembles a new prompt when only a part of the story must be regenerated. The story that needs to be partially redone is split in {initialpart, selectedpart} and {finalpart}, where the {selectedpart} is the section of the story that needs to be regenerated. This is the template of the {new prompt} }and how it is assembled: {new prompt = main prompt}} + 'It is important that the story starts with this part unchanged:{initialpart} and finishes with this part unchanged {finalpart}'
+- *redopartofstory*, POST method that assembles a new prompt when only a part of the story must be regenerated. The story that needs to be partially redone is split in {initialpart, selectedpart} and {finalpart}, where the {selectedpart} is the section of the story that needs to be regenerated. This is the template of the {new prompt} }and how it is assembled: {new prompt = main prompt}} + 'It is important that the story starts with this part unchanged:{initialpart} and finishes with this part unchanged {finalpart}'.
 
- - *savestory*, POST method that saves a story together with its story generation settings in a JSON file when the users provides a feedback positive. 
+ - *savestory*, POST method that saves a story and its prompt in the datastories CSV file when the users provides a positive feedback. The CSV file has the following comma separated fields:
+   • Prompt, that contains the prompt that has generated the story;
+   • Story, that contains the generated story.
 
-C. *Ollama* platform that gives access to the\textit{ Llama 3.2 model} and its fine-tuned version
+C. *Ollama* platform that gives access to the Llama 3.2 model and its fine-tuned version (storaitellermodel).
 
-D. *JSON file* that stores the stories that received a positive feedback by the users. This file can be used by an external process that takes care of the fine-tuning of the model to improve subsequent generations based on the provided feedback. 
+D. The *fine tuning process* that fine-tunes the LLM model based on Llama 3.2 with the stories stored in the CSV file. This process (see Figure 3) is run by:
+  1) executing the finetuner.py script that generates as output the LoRA adapter for the fine-tuning,
+  2) executing a python script provided by the Llama.cpp library that transforms the LoRA adapter in a gguf file, a format of adapter supported by the Ollama platform.
+ The finetuner.py script makes use of the Unsloth python library, an open source LLM fine tuning library that allows to generate LoRA (Low Rank Adaptation) adapters using efficiently the available hardware. This library runs on Linux or Unix operating systems, therefore the WSL (Windows Subsytem for Linux) framework has to be installed in Windows machines. A virtual environment specific for the fine-tuning process need also to be created in order to install all the libraries necessary for the task. The finetuner.py script creates the adapter starting from the current model (based on the Llama 3.2 3B pretrained model) and using the PEFT
+(Parameter-Efficient Fine-Tuning) library to fine-tune only a part of the parameters of the model. These are the steps executed by the finetuner.py script:
+  1) Thedata in the datastories.csv is loaded and the template expected by Ollama for the Llama 3.2 model is applied to the input dataset;
+ 2) The trainer is built defining its parameters (for example the number of training epochs, the learning rate, etc.) and the current model is trained accordingly;
+ 3) The process generates the LoRA adapter
+Considering that Ollama handles only adapters in the gguf format, the LoRA adapter must be converted to gguf file. This is done by executing from the CLI a script made available by the Llama.cpp library:
+ 
+  *python3 convert_lor_to_gguf.py ../lora_model/ --outype f16 --outfile storaiteller.gguf*
+
+ The f16 quantization has been applied in order to have a fast conversion and retain the accuracy of the original model. A modelfile.md file must be defined to instruct Ollama on how to integrate the current model with the above generated gguf adapter. The modelfile.md also defines the temperature of the model (when the temperature is closer to 1, the generated content is more creative, meaning that the next token selected in the sequence might not be the one with the highest probability) and the maximum length of the context window. The modelfile.md is defined as:
+
+  *FROM D:\ollama\Ollamamodels\blobs\sha256-dde5aa3fc5ffc17176b5e8bdc82f587b24b2678c6c66101bf7da77af9f7ccdff
+  # add the adpater
+  ADAPTER D:\python\venvforfinetuning\llama.cpp\storaiteller.gguf
+  # sets the temperature to 1 [higher is more creative, lower is more coherent]
+  PARAMETER temperature 0.8
+  # sets the lenght of the context window so that long stories can be generated without losing cohesion
+  PARAMETER num_ctx 120000*
+
+ Running the following CLI command, Ollama generates the new fine-tuned storaitelledmodel model that now can be used to generate new stories:  *ollama create storaitellermodel-f ./modelfile.md*
+
+     
