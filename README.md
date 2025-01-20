@@ -15,7 +15,7 @@ The objectives of this project are the following:
  
 ## Installation 
 
-The project is made of 3 main modules:
+The project is made of 4 main modules:
 - Ollama platform:
   - Install locally the Ollama platform, see [here](https://github.com/ollama/ollama) 
   - Install the [Ollama library](https://github.com/ollama/ollama-python) for Python
@@ -26,7 +26,7 @@ The project is made of 3 main modules:
   - Install the [FastAPI](https://github.com/fastapi/fastapi) Python library and [Uvicorn](https://github.com/encode/uvicorn) ASGI Web server for Python
   - Run the StorAIteller.py script available in this repository; this will create a web server listening to host="127.0.0.1" and port=8000 (local machine)
 - Front-end that is implemented by the StorAIteller.html and stylesheet.css files, both available in this repository, that need to be installed in the same directory.
-- Fine-tuning process, that is implemented by the finetuner.py Python script that has dependencies with the [Unsloth Python library] (https://github.com/unslothai/unsloth) and that require also the installation of the [llama.cpp library] (https://github.com/ggerganov/llama.cpp). This process must be run in a Linux-Unix environment. If the installation is done on a Windows machine, the [WSL environment](https://github.com/microsoft/WSL) must be installed and the processes must be run inside WSL.
+- Fine-tuning process, that is implemented by the finetuner.py Python script that has dependencies with the [Unsloth Python library](https://github.com/unslothai/unsloth) and that require also the installation of the [llama.cpp library](https://github.com/ggerganov/llama.cpp). This process must be run in a Linux-Unix environment. If the installation is done on a Windows machine, the [WSL environment](https://github.com/microsoft/WSL) must be installed and the processes must be run inside WSL.
   
 ## Features
 
