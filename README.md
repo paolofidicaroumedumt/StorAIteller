@@ -124,18 +124,20 @@ The finetuner.py script makes use of the Unsloth python library, an open source 
      
 Considering that Ollama handles only adapters in the gguf format, the LoRA adapter must be converted to gguf file. This is done by executing from the CLI a script made available by the Llama.cpp library:
  
-  *python3 convert_lor_to_gguf.py ../lora_model/ --outype f16 --outfile storaiteller.gguf*
+    python3 convert_lor_to_gguf.py ../lora_model/ --outype f16 --outfile storaiteller.gguf
 
  The f16 quantization has been applied in order to have a fast conversion and retain the accuracy of the original model. A modelfile.md file must be defined to instruct Ollama on how to integrate the current model with the above generated gguf adapter. The modelfile.md also defines the temperature of the model (when the temperature is closer to 1, the generated content is more creative, meaning that the next token selected in the sequence might not be the one with the highest probability) and the maximum length of the context window. The modelfile.md is defined as:
 
-  FROM \modelfolder\storaitellermodel
+    FROM \modelfolder\storaitellermodel
   
-  ADAPTER \adapterfolder\storaiteller.gguf
+    ADAPTER \adapterfolder\storaiteller.gguf
   
-  PARAMETER temperature 0.8
+    PARAMETER temperature 0.8
   
-  PARAMETER num_ctx 120000
+    PARAMETER num_ctx 120000
 
- Running the following CLI command, Ollama generates the new fine-tuned storaitelledmodel model that now can be used to generate new stories:  *ollama create storaitellermodel-f ./modelfile.md*
+ Running the following CLI command, Ollama generates the new fine-tuned storaitelledmodel model that now can be used to generate new stories:
+     
+     ollama create storaitellermodel-f ./modelfile.md
 
      
