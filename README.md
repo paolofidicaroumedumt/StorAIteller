@@ -10,7 +10,7 @@ The objectives of this project are the following:
 - implementation of a Web User Interface through which users can:
   - define the parameters to be considered for the story generation
   - refine the generated story and regenerate part of it
-  - provide a positive feedback to the generated story in order to include the story in an external fine-tuning process
+  - provide positive feedback to the generated story in order to include the story in an external fine-tuning process
 - implementation of the fine-tuning process that applies adapters to the LLM in order to consider the positive feedback provided by the users and enhance the quality of future story generations.
  
 ## Installation 
@@ -26,7 +26,7 @@ The project is made of 4 main modules:
   - Install the [FastAPI](https://github.com/fastapi/fastapi) Python library and [Uvicorn](https://github.com/encode/uvicorn) ASGI Web server for Python
   - Run the StorAIteller1.py script available in this repository; this will create a web server listening to host="127.0.0.1" and port=8000 (local machine)
 - Front-end that is implemented by the StorAIteller.html and stylesheet.css files, both available in this repository, that need to be installed in the same directory.
-- Fine-tuning process, that is implemented by the finetuner.py Python script that has dependencies with the [Unsloth Python library](https://github.com/unslothai/unsloth) and that require also the installation of the [llama.cpp library](https://github.com/ggerganov/llama.cpp). This process can be run periodically, when the Back-end module has stored stories in the data_stories.csv file based on the positive feedback recevied by the users. The finetuner.py script must be run in a Linux-Unix environment. If the installation is done on a Windows machine, the [WSL environment](https://github.com/microsoft/WSL) must be installed and the processes must be run inside WSL.
+- Fine-tuning process, that is implemented by the finetuner.py Python script that has dependencies with the [Unsloth Python library](https://github.com/unslothai/unsloth) and that require also the installation of the [llama.cpp library](https://github.com/ggerganov/llama.cpp). This process can be run periodically, when the Back-end module has stored stories in the data_stories.csv file based on the positive feedback received by the users. The finetuner.py script must be run in a Linux-Unix environment. If the installation is done on a Windows machine, the [WSL environment](https://github.com/microsoft/WSL) must be installed and the processes must be run inside WSL.
   
 ## Features
 
@@ -102,7 +102,7 @@ The prompt is assembled inserting the story parameters in the placeholders of th
 
 - *redopartofstory*, POST method that assembles a new prompt when only a part of the story must be regenerated. The story that needs to be partially redone is split in {initialpart, selectedpart} and {finalpart}, where the {selectedpart} is the section of the story that needs to be regenerated. This is the template of the {new prompt} }and how it is assembled: {new prompt = main prompt}} + '"It is important that the story includes exactly this part at the beginning: {initialpart} and exactly this part at the end: {finalpart}.".'.
 
- - *savestory*, POST method that saves a story and its prompt in the *data_stories.csv* CSV file when the users provides a positive feedback. The CSV file has the following comma separated fields:
+ - *savestory*, POST method that saves a story and its prompt in the *data_stories.csv* CSV file when the users provides positive feedback. The CSV file has the following comma separated fields:
    - Prompt, that contains the prompt that has generated the story;
    - Story, that contains the generated story.
 
